@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+  build:
+    docker: nimlang/nim:1.0.6
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: nimble test
+
+workflows:
+  version: 2
+
+  build_and_test:
+    jobs:
+      - build

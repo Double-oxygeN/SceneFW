@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>scenefw</title>
+<title>locale</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -805,7 +805,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">scenefw</h1>
+    <h1 class="title">locale</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -825,18 +825,10 @@ function main() {
   </div>
   <ul class="simple simple-toc" id="toc-list">
 <li>
-  <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
+  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
   <ul class="simple simple-toc-section">
-    
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#17" id="67">Macros</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#mail.m%2C%2Cuntyped"
-    title="mail(mailTypeId: untyped{ident}; contents: untyped): untyped"><wbr />mail<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#localmail.m%2C%2Cuntyped"
-    title="localmail(mailTypeId: untyped{ident}; contents: untyped): untyped"><wbr />localmail<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#docLocale"
+    title="docLocale = &quot;en&quot;"><wbr />doc<wbr />Locale<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
@@ -847,73 +839,21 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">Scene Framework (WAQWA Project)<table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">Author:</th><td> Double_oxygeN</td></tr>
-<tr><th class="docinfo-name">License:</th><td> Apache-2.0</td></tr>
-</tbody></table></p>
-  <div class="section" id="6">
-<h1><a class="toc-backref" href="#6">Imports</a></h1>
+  <p class="module-desc"><table class="docinfo" frame="void" rules="none"><col class="docinfo-name" /><col class="docinfo-content" /><tbody valign="top"><tr><th class="docinfo-name">warning:</th><td> Do not import this module!</td></tr>
+</tbody></table><p>This module is used only for documentation.</p>
+</p>
+  <div class="section" id="10">
+<h1><a class="toc-backref" href="#10">Consts</a></h1>
 <dl class="item">
-<a class="reference external" href="scenefw/scenemails.html">scenefw/scenemails</a>
-</dl></div>
-<div class="section" id="17">
-<h1><a class="toc-backref" href="#17">Macros</a></h1>
-<dl class="item">
-<a id="mail.m,,untyped"></a>
-<dt><pre><span class="Keyword">macro</span> <a href="#mail.m%2C%2Cuntyped"><span class="Identifier">mail</span></a><span class="Other">(</span><span class="Identifier">mailTypeId</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">{</span><span class="Identifier">ident</span><span class="Other">}</span><span class="Other">;</span> <span class="Identifier">contents</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<a id="docLocale"></a>
+<dt><pre><a href="locale.html#docLocale"><span class="Identifier">docLocale</span></a> <span class="Other">=</span> <span class="StringLit">&quot;en&quot;</span></pre></dt>
 <dd>
 
-<p>Mail construction macro.</p>
-<p>This macro requires type identifier (<tt class="docutils literal"><span class="pre">mailTypeId</span></tt>) and variable declaration (<tt class="docutils literal"><span class="pre">contents</span></tt>). It automatically generates a new type whose name is same as <tt class="docutils literal"><span class="pre">mailTypeId</span></tt>, a constructor proc (type name with prefix <tt class="docutils literal"><span class="pre">new</span></tt>) and getter procs for each property. The type inherits from <tt class="docutils literal"><span class="pre">SceneMail</span></tt>. The generated type and procs are exported, so you should call this at top-level and use them in other modules.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
-<pre class="listing"><span class="Identifier">mail</span><span class="Other">(</span><span class="Identifier">ExampleMail</span><span class="Other">)</span><span class="Other">:</span>
-  <span class="Keyword">var</span>
-    <span class="Identifier">username</span><span class="Other">:</span> <span class="Identifier">string</span>
-    <span class="Identifier">score</span><span class="Other">,</span> <span class="Identifier">highScore</span><span class="Other">:</span> <span class="Identifier">Natural</span>
-<span class="Comment">## will generate</span>
-<span class="Comment">## </span>
-<span class="Comment">##   type</span>
-<span class="Comment">##     ExampleMail* = ref object of SceneMail</span>
-<span class="Comment">##       username: string</span>
-<span class="Comment">##       score, highScore: Natural</span>
-<span class="Comment">## </span>
-<span class="Comment">##   proc newExampleMail*(username: string; score, highScore: Natural): ExampleMail =</span>
-<span class="Comment">##     ExampleMail(username: username, score: score, highScore: highScore)</span>
-<span class="Comment">## </span>
-<span class="Comment">##   proc username*(self: ExampleMail): string = self.username</span>
-<span class="Comment">##   proc score*(self: ExampleMail): Natural = self.score</span>
-<span class="Comment">##   proc highScore*(self: ExampleMail): Natural = self.highScore</span></pre>
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw.nim#L77"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/private/locale.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="localmail.m,,untyped"></a>
-<dt><pre><span class="Keyword">macro</span> <a href="#localmail.m%2C%2Cuntyped"><span class="Identifier">localmail</span></a><span class="Other">(</span><span class="Identifier">mailTypeId</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">{</span><span class="Identifier">ident</span><span class="Other">}</span><span class="Other">;</span> <span class="Identifier">contents</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
-<dd>
-
-<p>Local mail construction macro.</p>
-<p>This macro requires type identifier (<tt class="docutils literal"><span class="pre">mailTypeId</span></tt>) and variable declaration (<tt class="docutils literal"><span class="pre">contents</span></tt>). It automatically generates a new type whose name is same as <tt class="docutils literal"><span class="pre">mailTypeId</span></tt> and a constructor proc (type name with prefix <tt class="docutils literal"><span class="pre">new</span></tt>). The type inherits from <tt class="docutils literal"><span class="pre">SceneMail</span></tt>. The generated type and proc are not exported when you just call this.</p>
-
-<p><strong class="examples_text">Examples:</strong></p>
-<pre class="listing"><span class="Identifier">localmail</span><span class="Other">(</span><span class="Identifier">ExampleLocalMail</span><span class="Other">)</span><span class="Other">:</span>
-  <span class="Keyword">var</span>
-    <span class="Identifier">username</span><span class="Other">:</span> <span class="Identifier">string</span>
-    <span class="Identifier">score</span><span class="Other">,</span> <span class="Identifier">highScore</span><span class="Other">:</span> <span class="Identifier">Natural</span>
-<span class="Comment">## will generate</span>
-<span class="Comment">## </span>
-<span class="Comment">##   type</span>
-<span class="Comment">##     ExampleLocalMail = ref object of SceneMail</span>
-<span class="Comment">##       username: string</span>
-<span class="Comment">##       score, highScore: Natural</span>
-<span class="Comment">## </span>
-<span class="Comment">##   proc newExampleLocalMail(username: string; score, highScore: Natural): ExampleLocalMail =</span>
-<span class="Comment">##     ExampleLocalMail(username: username, score: score, highScore: highScore)</span></pre>
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw.nim#L106"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/private/locale.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -926,7 +866,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-03-20 02:03:08 UTC</small>
+        <small>Made with Nim. Generated: 2020-03-20 07:54:56 UTC</small>
       </div>
     </div>
   </div>

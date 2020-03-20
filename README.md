@@ -8,6 +8,10 @@ Scene-oriented programming framework for game development.
 
 This is a part of *WAQWA* project.
 
+## Documentation
+
+- [API](https://gh.double-oxygen.net/SceneFW/scenefw.html)
+
 ## License
 
 Apache License, version 2.0  

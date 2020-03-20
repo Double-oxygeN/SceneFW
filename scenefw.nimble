@@ -11,3 +11,9 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 1.0.6"
+
+
+# Tasks
+
+task docx, "Generate documentations":
+  exec "nim doc --project --outDir:docs --git.url:https://github.com/Double-oxygeN/SceneFW --git.commit:master src/scenefw"

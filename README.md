@@ -10,7 +10,7 @@ This is a part of *WAQWA* project.
 
 ## Documentation
 
-- [API](https://gh.double-oxygen.net/SceneFW/scenefw.html)
+- [API](https://gh.double-oxygen.net/SceneFW/en/scenefw.html)
 
 ## License
 

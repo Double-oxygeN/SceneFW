@@ -10,7 +10,7 @@
 
 ## ドキュメント
 
-- [APIリファレンス](https://gh.double-oxygen.net/SceneFW/scenefw.html)
+- [APIリファレンス](https://gh.double-oxygen.net/SceneFW/ja/scenefw.html)
 
 ## ライセンス
 

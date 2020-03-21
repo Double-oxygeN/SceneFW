@@ -18,8 +18,14 @@
 ## :License: Apache-2.0
 
 import macros
+
+import scenefw/components
+import scenefw/effects
 import scenefw/scenemails
 import scenefw/private/locale
+
+export WaqwaDrawEffect, WaqwaError
+export Component
 
 template mail0(mailTypeId: untyped{ident}; exportMarker: bool = true; contents: untyped): untyped =
   expectKind contents, nnkStmtList

@@ -12,7 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## Scenes.
+import private/locale
+
+when docLocale == "en":
+  ## Scenes.
+
+elif docLocale == "ja":
+  ## シーン。
 
 import effects, transitions, components, scenemails
 
@@ -44,24 +50,48 @@ proc quit*(self: BaseScene) =
 
 
 method init*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
-  ## Initialize the scene.
-  ## This method is called when the game begins.
+  when docLocale == "en":
+    ## Initialize the scene.
+    ## This method is called when the game begins.
+
+  elif docLocale == "ja":
+    ## シーンを初期化する。
+    ## このメソッドはゲーム開始時に呼び出される。
+
   discard
 
 
 method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base, tags: [IOEffect].} =
-  ## Initialize the scene with the mail sent by the previous scene.
-  ## This method is called whenever the scene begins.
+  when docLocale == "en":
+    ## Initialize the scene with the mail sent by the previous scene.
+    ## This method is called whenever the scene begins.
+
+  elif docLocale == "ja":
+    ## 前のシーンから送られてきたシーンメールを使ってシーンを初期化する。
+    ## このメソッドはシーン開始時に毎回呼び出される。
+
   discard
 
 
 method update*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
-  ## Update the scene.
-  ## This method is called in every frame.
+  when docLocale == "en":
+    ## Update the scene.
+    ## This method is called in every frame.
+
+  elif docLocale == "ja":
+    ## シーンを更新する。
+    ## このメソッドは毎フレーム呼び出される。
+
   discard
 
 
 method draw*(self: BaseScene; component: Component) {.base, tags: [IOEffect, WaqwaDrawEffect].} =
-  ## Output the scene to the display.
-  ## This method is called at most once in a frame.
+  when docLocale == "en":
+    ## Output the scene to the display.
+    ## This method is called at most once in a frame.
+
+  elif docLocale == "ja":
+    ## シーンを画面に出力する。
+    ## このメソッドは各フレームに最大で1回まで呼び出される。
+
   discard

@@ -22,10 +22,15 @@ import macros
 import scenefw/components
 import scenefw/effects
 import scenefw/scenemails
+import scenefw/scenes
+import scenefw/game
 import scenefw/private/locale
 
 export WaqwaDrawEffect, WaqwaError
 export Component
+export SceneMail
+export BaseScene, transitionTo, scenes.quit
+export Game, newGame, setFramesPerSecond, unsetFramesPerSecond, addScene, countScenes, start
 
 template mail0(mailTypeId: untyped{ident}; exportMarker: bool = true; contents: untyped): untyped =
   expectKind contents, nnkStmtList
@@ -80,6 +85,7 @@ template mail0(mailTypeId: untyped{ident}; exportMarker: bool = true; contents: 
         newStmtList(newDotExpr(ident"self", varIdent)))
 
       result.add getterProcDecl
+
 
 macro mail*(mailTypeId: untyped{ident}; contents: untyped): untyped =
   when docLocale == "en":
@@ -137,6 +143,7 @@ macro mail*(mailTypeId: untyped{ident}; contents: untyped): untyped =
       ##   proc highScore*(self: ExampleMail): Natural = self.highScore
 
   mail0(mailTypeId, true, contents)
+
 
 macro localmail*(mailTypeId: untyped{ident}; contents: untyped): untyped =
   when docLocale == "en":

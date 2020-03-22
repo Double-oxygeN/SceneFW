@@ -38,7 +38,7 @@ type
     framesPerSecond: Natural
 
 
-proc newGame*: Game =
+proc newGame*(component: Component): Game =
   when docLocale == "en":
     ## Create new game object.
     ## No scenes are set and frames-per-second (FPS) is set at 60.
@@ -47,9 +47,11 @@ proc newGame*: Game =
     ## ゲームオブジェクトを新規作成する。
     ## シーンは1つも設定されておらず，FPSは60に設定されている。
 
-  result = Game(sceneTable: newTable[string, Scene]())
-  result.strictFps = true
-  result.framesPerSecond = 60
+  result = Game(
+    sceneTable: newTable[string, Scene](),
+    component: component,
+    strictFps: true,
+    framesPerSecond: 60)
 
 
 proc setFramesPerSecond*(self: Game; fps: Positive): Natural {.discardable.} =
@@ -126,10 +128,18 @@ proc start*(self: Game) =
   while not quitFlag:
     currentScene.resetTransition()
 
+    self.component.beforeDraw()
+
     if not speedUpFlag:
       currentScene.draw(self.component)
 
+      self.component.afterDraw()
+
+    self.component.beforeUpdate()
+
     currentScene.update(self.component)
+
+    self.component.afterUpdate()
 
     case currentScene.transitionKind
     of tkStay:

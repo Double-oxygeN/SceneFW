@@ -110,6 +110,23 @@ proc start*(self: Game) =
   elif docLocale == "ja":
     ## ゲームを開始する。
 
+  type LoopCallee = (proc (recur: (proc () {.closure.})) {.closure.})
+
+  proc loop(callee: LoopCallee) =
+    when defined(js):
+      discard window.requestAnimationFrame do (elapsedTimeMillis: float):
+        callee do ():
+          loop(callee)
+
+    else:
+      var quitFlag = false
+
+      while not quitFlag:
+        quitFlag = true
+        callee do ():
+          quitFlag = false
+
+
   init self.component
   defer: finalize self.component
 
@@ -117,7 +134,6 @@ proc start*(self: Game) =
   currentScene.init(self.component)
 
   var
-    quitFlag: bool = false
     speedUpFlag: bool = false
     frameCount = 1'i64
 
@@ -125,7 +141,7 @@ proc start*(self: Game) =
     msecPerFrame = 1e3 / self.framesPerSecond.toBiggestFloat()
     startMonoTime = getMonoTime()
 
-  while not quitFlag:
+  loop do (recur: auto):
     currentScene.resetTransition()
 
     self.component.beforeDraw()
@@ -143,7 +159,7 @@ proc start*(self: Game) =
 
     case currentScene.transitionKind
     of tkStay:
-      discard
+      recur()
 
     of tkNextScene:
       let
@@ -154,21 +170,24 @@ proc start*(self: Game) =
 
       currentScene = nextScene
 
+      recur()
+
     of tkQuit:
-      quitFlag = true
+      discard
 
-    if self.strictFps:
-      let
-        limitMsec = (msecPerFrame * frameCount.toBiggestFloat()).toBiggestInt()
-        monoTimeNow = getMonoTime()
-        elapsedMsec = (monoTimeNow - startMonoTime).inMilliseconds()
+    when not defined(js):
+      if self.strictFps:
+        let
+          limitMsec = (msecPerFrame * frameCount.toBiggestFloat()).toBiggestInt()
+          monoTimeNow = getMonoTime()
+          elapsedMsec = (monoTimeNow - startMonoTime).inMilliseconds()
 
-      if elapsedMsec <= limitMsec:
-        speedUpFlag = false
-        if limitMsec - elapsedMsec > 1:
-          sleep((limitMsec - elapsedMsec).int - 1)
+        if elapsedMsec <= limitMsec:
+          speedUpFlag = false
+          if limitMsec - elapsedMsec > 1:
+            sleep((limitMsec - elapsedMsec).int - 1)
 
-      else:
-        speedUpFlag = true
+        else:
+          speedUpFlag = true
 
     inc frameCount

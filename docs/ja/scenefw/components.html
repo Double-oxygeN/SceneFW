@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>scenemails</title>
+<title>components</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -805,7 +805,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">scenemails</h1>
+    <h1 class="title">components</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -824,8 +824,8 @@ function main() {
     </select>
   </div>
   <ul class="simple simple-toc" id="toc-list">
-<li><a class="reference" id="overview_toc" href="#overview">Overview</a></li>
-<li><a class="reference" id="example_toc" href="#example">Example</a></li>
+<li><a class="reference" id="実装指針_toc" href="#実装指針">実装指針</a></li>
+<li><a class="reference" id="メソッドの呼出順序_toc" href="#メソッドの呼出順序">メソッドの呼出順序</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -835,9 +835,26 @@ function main() {
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#SceneMail"
-    title="SceneMail = ref object of RootObj
-  nextSceneId*: string"><wbr />Scene<wbr />Mail<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#Component"
+    title="Component = ref object of RootObj"><wbr />Component<span class="attachedType"></span></a></li>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#14" id="64">Methods</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#init.e%2CComponent"
+    title="init(self: Component)"><wbr />init<span class="attachedType">Component</span></a></li>
+  <li><a class="reference" href="#finalize.e%2CComponent"
+    title="finalize(self: Component)"><wbr />finalize<span class="attachedType">Component</span></a></li>
+  <li><a class="reference" href="#beforeDraw.e%2CComponent"
+    title="beforeDraw(self: Component)"><wbr />before<wbr />Draw<span class="attachedType">Component</span></a></li>
+  <li><a class="reference" href="#afterDraw.e%2CComponent"
+    title="afterDraw(self: Component)"><wbr />after<wbr />Draw<span class="attachedType">Component</span></a></li>
+  <li><a class="reference" href="#beforeUpdate.e%2CComponent"
+    title="beforeUpdate(self: Component)"><wbr />before<wbr />Update<span class="attachedType">Component</span></a></li>
+  <li><a class="reference" href="#afterUpdate.e%2CComponent"
+    title="afterUpdate(self: Component)"><wbr />after<wbr />Update<span class="attachedType">Component</span></a></li>
 
   </ul>
 </li>
@@ -848,33 +865,44 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">Mail: Message between two scenes. <tt class="docutils literal"><span class="pre">SceneMail</span></tt> is just an abstruct type. Therefore, framework users have to implement concrete structure fitting their own situations.
-<h1><a class="toc-backref" id="overview" href="#overview">Overview</a></h1><p>Mail is an information shared just between two scenes.</p>
-
-<h1><a class="toc-backref" id="example" href="#example">Example</a></h1><p>Consider that there are two scenes: <tt class="docutils literal"><span class="pre">ExScene1</span></tt> and <tt class="docutils literal"><span class="pre">ExScene2</span></tt>. When transitioning to <tt class="docutils literal"><span class="pre">ExScene2</span></tt>, <tt class="docutils literal"><span class="pre">ExScene1</span></tt> wants to share the data below:</p>
-<ul class="simple"><li><tt class="docutils literal"><span class="pre">sock</span></tt> of type <tt class="docutils literal"><span class="pre">AsyncSocket</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">username</span></tt> of type <tt class="docutils literal"><span class="pre">string</span></tt></li>
+  <p class="module-desc">コンポーネント。 ウィンドウ管理，画像管理，音声管理，描画などを含む。 実装は，選択する外部ライブラリに依存する。
+<h1><a class="toc-backref" id="実装指針" href="#実装指針">実装指針</a></h1><p>このフレームワークでは， <tt class="docutils literal"><span class="pre">Component</span></tt> に対する実装は提供されない。 実装はWAQWAのプラグインライブラリとして提供されることを期待する。</p>
+<p><tt class="docutils literal"><span class="pre">Component</span></tt> とは複数の機能の集合体である。 以下に機能の例を挙げる：</p>
+<ul class="simple"><li>ウィンドウ管理<ul class="simple"><li>ウィンドウ表示 / 非表示</li>
+<li>フルスクリーン化 / 解除</li>
+<li>大きさ変更</li>
+<li>垂直同期</li>
 </ul>
-<p>In this situation, I recommend implementing <tt class="docutils literal"><span class="pre">ExMail1</span></tt> as below:</p>
-<pre class="listing"><span class="Keyword">type</span>
-  <span class="Identifier">ExMail1</span><span class="Operator">*</span> <span class="Operator">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">SceneMail</span>
-    <span class="Identifier">sock</span><span class="Punctuation">:</span> <span class="Identifier">AsyncSocket</span>
-    <span class="Identifier">username</span><span class="Punctuation">:</span> <span class="Identifier">string</span>
+</li>
+<li>入力管理<ul class="simple"><li>キーボード / マウス / ゲームパッドの状態取得</li>
+</ul>
+</li>
+<li>画像管理<ul class="simple"><li>画像ファイル読込</li>
+<li>画像保存</li>
+<li>画像編集</li>
+</ul>
+</li>
+<li>音声管理<ul class="simple"><li>音声ファイル読込</li>
+<li>BGM / 効果音の再生</li>
+<li>フェードイン / フェードアウト</li>
+<li>3D音響</li>
+</ul>
+</li>
+<li>描画: <tt class="docutils literal"><span class="pre">WaqwaDrawEffect</span></tt> <em>タグを全ての描画に関連した手続きに付与すること。</em><ul class="simple"><li>基本図形の描画</li>
+<li>画像の描画</li>
+</ul>
+</li>
+<li>書体管理<ul class="simple"><li>フォントファイルの読込</li>
+<li>文字描画</li>
+</ul>
+</li>
+<li>ネットワーク管理<ul class="simple"><li>TCP / UDPソケットの接続</li>
+</ul>
+</li>
+</ul>
 
-
-<span class="Keyword">proc</span> <span class="Identifier">newExMail1</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Identifier">sock</span><span class="Punctuation">:</span> <span class="Identifier">AsyncSocket</span><span class="Punctuation">;</span> <span class="Identifier">username</span><span class="Punctuation">:</span> <span class="Identifier">string</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">ExMail1</span> <span class="Operator">=</span>
-  <span class="Identifier">ExMail1</span><span class="Punctuation">(</span><span class="Identifier">sock</span><span class="Punctuation">:</span> <span class="Identifier">sock</span><span class="Punctuation">,</span> <span class="Identifier">username</span><span class="Punctuation">:</span> <span class="Identifier">username</span><span class="Punctuation">)</span>
-
-
-<span class="Keyword">proc</span> <span class="Identifier">sock</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Identifier">self</span><span class="Punctuation">:</span> <span class="Identifier">ExMail1</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">AsyncSocket</span> <span class="Operator">=</span> <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">sock</span>
-<span class="Keyword">proc</span> <span class="Identifier">username</span><span class="Operator">*</span><span class="Punctuation">(</span><span class="Identifier">self</span><span class="Punctuation">:</span> <span class="Identifier">ExMail1</span><span class="Punctuation">)</span><span class="Punctuation">:</span> <span class="Identifier">string</span> <span class="Operator">=</span> <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">username</span></pre><p><tt class="docutils literal"><span class="pre">ExScene1</span></tt> should send mail and transition like this:</p>
-<pre class="listing"><span class="Keyword">method</span> <span class="Identifier">update</span><span class="Punctuation">(</span><span class="Identifier">self</span><span class="Punctuation">:</span> <span class="Identifier">ExScene1</span><span class="Punctuation">;</span> <span class="Identifier">component</span><span class="Punctuation">:</span> <span class="Identifier">ExComponent</span><span class="Punctuation">)</span> <span class="Operator">=</span>
-  <span class="Comment"># ...</span>
-  <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">transitionTo</span><span class="Punctuation">(</span><span class="StringLit">&quot;ExScene2&quot;</span><span class="Punctuation">,</span> <span class="Identifier">newExMail</span><span class="Punctuation">(</span><span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">sock</span><span class="Punctuation">,</span> <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">username</span><span class="Punctuation">)</span><span class="Punctuation">)</span>
-  <span class="Comment"># ...</span></pre><p>And then <tt class="docutils literal"><span class="pre">ExScene2</span></tt> can receive <tt class="docutils literal"><span class="pre">ExMail1</span></tt> like this:</p>
-<pre class="listing"><span class="Keyword">method</span> <span class="Identifier">init</span><span class="Punctuation">(</span><span class="Identifier">self</span><span class="Punctuation">:</span> <span class="Identifier">ExScene2</span><span class="Punctuation">;</span> <span class="Identifier">component</span><span class="Punctuation">:</span> <span class="Identifier">ExComponent</span><span class="Punctuation">;</span> <span class="Identifier">mail</span><span class="Punctuation">:</span> <span class="Identifier">ExMail1</span><span class="Punctuation">)</span> <span class="Operator">=</span>
-  <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">sock</span> <span class="Operator">=</span> <span class="Identifier">mail</span><span class="Operator">.</span><span class="Identifier">sock</span>
-  <span class="Identifier">self</span><span class="Operator">.</span><span class="Identifier">username</span> <span class="Operator">=</span> <span class="Identifier">mail</span><span class="Operator">.</span><span class="Identifier">username</span></pre></p>
+<h1><a class="toc-backref" id="メソッドの呼出順序" href="#メソッドの呼出順序">メソッドの呼出順序</a></h1><p><em>TODO: Add a figure here.</em> </p>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
@@ -883,17 +911,87 @@ function main() {
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<a id="SceneMail"></a>
-<dt><pre><a href="scenemails.html#SceneMail"><span class="Identifier">SceneMail</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">RootObj</span>
-  <span class="Identifier">nextSceneId</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">string</span>
-</pre></dt>
+<a id="Component"></a>
+<dt><pre><a href="components.html#Component"><span class="Identifier">Component</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">RootObj</span></pre></dt>
 <dd>
 
-Message between two scenes.
+
+Component.
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/scenemails.nim#L131"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L109"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/scenemails.nim#L131" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+
+</dl></div>
+<div class="section" id="14">
+<h1><a class="toc-backref" href="#14">Methods</a></h1>
+<dl class="item">
+<a id="init.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#init.e%2CComponent"><span class="Identifier">init</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+コンポーネントの初期化を行う。 この手続きはゲーム開始時に呼び出される。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L113"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="finalize.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#finalize.e%2CComponent"><span class="Identifier">finalize</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+コンポーネントの終了処理を行う。 この手続きはゲーム終了時に呼び出される。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L125"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="beforeDraw.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#beforeDraw.e%2CComponent"><span class="Identifier">beforeDraw</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+描画前処理を行う。 この手続きはシーンの流れの最初に必ず呼び出される。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L137"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="afterDraw.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#afterDraw.e%2CComponent"><span class="Identifier">afterDraw</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+描画後処理を行う。 もし描画が行われなかった場合は，この手続きも同様に呼び出されない。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L149"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="beforeUpdate.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#beforeUpdate.e%2CComponent"><span class="Identifier">beforeUpdate</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+更新前処理を行う。 この手続きは <tt class="docutils literal"><span class="pre">beforeDraw</span></tt> と <tt class="docutils literal"><span class="pre">afterDraw</span></tt> の両方よりも後に必ず呼び出される。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L161"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="afterUpdate.e,Component"></a>
+<dt><pre><span class="Keyword">method</span> <a href="#afterUpdate.e%2CComponent"><span class="Identifier">afterUpdate</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+更新後処理を行う。
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L173"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -906,7 +1004,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-03-22 09:30:46 UTC</small>
+        <small>Made with Nim. Generated: 2020-03-22 09:30:49 UTC</small>
       </div>
     </div>
   </div>

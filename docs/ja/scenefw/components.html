@@ -824,6 +824,8 @@ function main() {
     </select>
   </div>
   <ul class="simple simple-toc" id="toc-list">
+<li><a class="reference" id="実装指針_toc" href="#実装指針">実装指針</a></li>
+<li><a class="reference" id="メソッドの呼出順序_toc" href="#メソッドの呼出順序">メソッドの呼出順序</a></li>
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
   <ul class="simple simple-toc-section">
@@ -863,7 +865,44 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">コンポーネント。 ウィンドウ管理，画像管理，音声管理，描画などを含む。 実装は，選択する外部ライブラリに依存する。</p>
+  <p class="module-desc">コンポーネント。 ウィンドウ管理，画像管理，音声管理，描画などを含む。 実装は，選択する外部ライブラリに依存する。
+<h1><a class="toc-backref" id="実装指針" href="#実装指針">実装指針</a></h1><p>このフレームワークでは， <tt class="docutils literal"><span class="pre">Component</span></tt> に対する実装は提供されない。 実装はWAQWAのプラグインライブラリとして提供されることを期待する。</p>
+<p><tt class="docutils literal"><span class="pre">Component</span></tt> とは複数の機能の集合体である。 以下に機能の例を挙げる：</p>
+<ul class="simple"><li>ウィンドウ管理<ul class="simple"><li>ウィンドウ表示 / 非表示</li>
+<li>フルスクリーン化 / 解除</li>
+<li>大きさ変更</li>
+<li>垂直同期</li>
+</ul>
+</li>
+<li>入力管理<ul class="simple"><li>キーボード / マウス / ゲームパッドの状態取得</li>
+</ul>
+</li>
+<li>画像管理<ul class="simple"><li>画像ファイル読込</li>
+<li>画像保存</li>
+<li>画像編集</li>
+</ul>
+</li>
+<li>音声管理<ul class="simple"><li>音声ファイル読込</li>
+<li>BGM / 効果音の再生</li>
+<li>フェードイン / フェードアウト</li>
+<li>3D音響</li>
+</ul>
+</li>
+<li>描画: <tt class="docutils literal"><span class="pre">WaqwaDrawEffect</span></tt> <em>タグを全ての描画に関連した手続きに付与すること。</em><ul class="simple"><li>基本図形の描画</li>
+<li>画像の描画</li>
+</ul>
+</li>
+<li>書体管理<ul class="simple"><li>フォントファイルの読込</li>
+<li>文字描画</li>
+</ul>
+</li>
+<li>ネットワーク管理<ul class="simple"><li>TCP / UDPソケットの接続</li>
+</ul>
+</li>
+</ul>
+
+<h1><a class="toc-backref" id="メソッドの呼出順序" href="#メソッドの呼出順序">メソッドの呼出順序</a></h1><p><em>TODO: Add a figure here.</em> </p>
+</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
@@ -879,9 +918,9 @@ function main() {
 
 Component.
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L28"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L109"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -895,9 +934,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 コンポーネントの初期化を行う。 この手続きはゲーム開始時に呼び出される。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L32"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L113"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <a id="finalize.e,Component"></a>
@@ -906,9 +945,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 コンポーネントの終了処理を行う。 この手続きはゲーム終了時に呼び出される。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L44"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L125"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L44" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <a id="beforeDraw.e,Component"></a>
@@ -917,9 +956,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 描画前処理を行う。 この手続きはシーンの流れの最初に必ず呼び出される。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L56"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L137"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L56" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <a id="afterDraw.e,Component"></a>
@@ -928,9 +967,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 描画後処理を行う。 もし描画が行われなかった場合は，この手続きも同様に呼び出されない。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L68"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L149"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <a id="beforeUpdate.e,Component"></a>
@@ -939,9 +978,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 更新前処理を行う。 この手続きは <tt class="docutils literal"><span class="pre">beforeDraw</span></tt> と <tt class="docutils literal"><span class="pre">afterDraw</span></tt> の両方よりも後に必ず呼び出される。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L80"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L161"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L80" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <a id="afterUpdate.e,Component"></a>
@@ -950,9 +989,9 @@ class="link-seesrc" target="_blank">Source</a>
 
 更新後処理を行う。
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L92"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L173"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L92" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -965,7 +1004,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-03-21 02:04:30 UTC</small>
+        <small>Made with Nim. Generated: 2020-03-22 09:30:49 UTC</small>
       </div>
     </div>
   </div>

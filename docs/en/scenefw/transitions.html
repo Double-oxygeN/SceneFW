@@ -17,7 +17,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>components</title>
+<title>transitions</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -805,7 +805,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">components</h1>
+    <h1 class="title">transitions</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -824,37 +824,14 @@ function main() {
     </select>
   </div>
   <ul class="simple simple-toc" id="toc-list">
-<li><a class="reference" id="implementation-guideline_toc" href="#implementation-guideline">Implementation guideline</a></li>
-<li><a class="reference" id="order-of-calling-methods_toc" href="#order-of-calling-methods">Order of calling methods</a></li>
-<li>
-  <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
-  <ul class="simple simple-toc-section">
-    
-  </ul>
-</li>
 <li>
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#Component"
-    title="Component = ref object of RootObj"><wbr />Component<span class="attachedType"></span></a></li>
-
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#14" id="64">Methods</a>
-  <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#init.e%2CComponent"
-    title="init(self: Component)"><wbr />init<span class="attachedType">Component</span></a></li>
-  <li><a class="reference" href="#finalize.e%2CComponent"
-    title="finalize(self: Component)"><wbr />finalize<span class="attachedType">Component</span></a></li>
-  <li><a class="reference" href="#beforeDraw.e%2CComponent"
-    title="beforeDraw(self: Component)"><wbr />before<wbr />Draw<span class="attachedType">Component</span></a></li>
-  <li><a class="reference" href="#afterDraw.e%2CComponent"
-    title="afterDraw(self: Component)"><wbr />after<wbr />Draw<span class="attachedType">Component</span></a></li>
-  <li><a class="reference" href="#beforeUpdate.e%2CComponent"
-    title="beforeUpdate(self: Component)"><wbr />before<wbr />Update<span class="attachedType">Component</span></a></li>
-  <li><a class="reference" href="#afterUpdate.e%2CComponent"
-    title="afterUpdate(self: Component)"><wbr />after<wbr />Update<span class="attachedType">Component</span></a></li>
+      <li><a class="reference" href="#TransitionKind"
+    title="TransitionKind = enum
+  tkStay,                     ## No transition.
+  tkNextScene,                ## Transition to another scene.
+  tkQuit                      ## End of transition."><wbr />Transition<wbr />Kind<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
@@ -865,133 +842,22 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc">Component. This includes window manager, image manager, sound manager, painter and so on. The implementation depends on the external libraries you choose.
-<h1><a class="toc-backref" id="implementation-guideline" href="#implementation-guideline">Implementation guideline</a></h1><p>In this framework, there is no implementation of <tt class="docutils literal"><span class="pre">Component</span></tt>. I expect that the implementation will be provided as a plugin library of WAQWA.</p>
-<p><tt class="docutils literal"><span class="pre">Component</span></tt> is a collection of functionalities. Examples:</p>
-<ul class="simple"><li>Window manager<ul class="simple"><li>Show / hide window</li>
-<li>Toggle fullscreen</li>
-<li>Resize</li>
-<li>Vsync</li>
-</ul>
-</li>
-<li>Input manager<ul class="simple"><li>Get keyboard / mouse / gamepad statuses</li>
-</ul>
-</li>
-<li>Image manager<ul class="simple"><li>Load files</li>
-<li>Store images</li>
-<li>Edit</li>
-</ul>
-</li>
-<li>Sound manager<ul class="simple"><li>Load files</li>
-<li>Play BGM / SFX</li>
-<li>Fade-in / fade-out</li>
-<li>3D</li>
-</ul>
-</li>
-<li>Painter: <em>Tag</em> <tt class="docutils literal"><span class="pre">WaqwaDrawEffect</span></tt> <em>for all procs about drawing.</em><ul class="simple"><li>Draw fundamental figures</li>
-<li>Draw images</li>
-</ul>
-</li>
-<li>Font manager<ul class="simple"><li>Load files</li>
-<li>Draw text</li>
-</ul>
-</li>
-<li>Network manager<ul class="simple"><li>Connect TCP / UDP socket</li>
-</ul>
-</li>
-</ul>
-
-<h1><a class="toc-backref" id="order-of-calling-methods" href="#order-of-calling-methods">Order of calling methods</a></h1><p><em>TODO: Add a figure here.</em> </p>
-</p>
-  <div class="section" id="6">
-<h1><a class="toc-backref" href="#6">Imports</a></h1>
-<dl class="item">
-<a class="reference external" href="private/locale.html">private/locale</a>
-</dl></div>
-<div class="section" id="7">
+  <p class="module-desc">Transition kinds. Each value of <tt class="docutils literal"><span class="pre">TransitionKind</span></tt> indicates how to select the next scene.</p>
+  <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<a id="Component"></a>
-<dt><pre><a href="components.html#Component"><span class="Identifier">Component</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">RootObj</span></pre></dt>
+<a id="TransitionKind"></a>
+<dt><pre><a href="transitions.html#TransitionKind"><span class="Identifier">TransitionKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">tkStay</span><span class="Other">,</span>                     <span class="Comment">## No transition.</span>
+  <span class="Identifier">tkNextScene</span><span class="Other">,</span>                <span class="Comment">## Transition to another scene.</span>
+  <span class="Identifier">tkQuit</span>                      <span class="Comment">## End of transition.</span></pre></dt>
 <dd>
 
-
-Component.
+Transition kinds.
 &nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L109"
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/transitions.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L109" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-
-</dl></div>
-<div class="section" id="14">
-<h1><a class="toc-backref" href="#14">Methods</a></h1>
-<dl class="item">
-<a id="init.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#init.e%2CComponent"><span class="Identifier">init</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Component initialization. This proc is called when the game starts.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L113"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L113" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="finalize.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#finalize.e%2CComponent"><span class="Identifier">finalize</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Component finalization. This proc is called when the game ends.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L125"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L125" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="beforeDraw.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#beforeDraw.e%2CComponent"><span class="Identifier">beforeDraw</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Actions before drawing. This proc is always called as the first action in the scene flow.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L137"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L137" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="afterDraw.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#afterDraw.e%2CComponent"><span class="Identifier">afterDraw</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Actions after drawing. When drawing is not occurred, this proc is not called either.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L149"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="beforeUpdate.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#beforeUpdate.e%2CComponent"><span class="Identifier">beforeUpdate</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Actions before update. This proc must be called after both <tt class="docutils literal"><span class="pre">beforeDraw</span></tt> and <tt class="docutils literal"><span class="pre">afterDraw</span></tt>.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L161"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L161" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="afterUpdate.e,Component"></a>
-<dt><pre><span class="Keyword">method</span> <a href="#afterUpdate.e%2CComponent"><span class="Identifier">afterUpdate</span></a><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <a href="components.html#Component"><span class="Identifier">Component</span></a><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">base</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Actions after update.
-&nbsp;&nbsp;<a
-href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw/components.nim#L173"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/components.nim#L173" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw/transitions.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 

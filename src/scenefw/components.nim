@@ -18,11 +18,92 @@ when docLocale == "en":
   ## Component.
   ## This includes window manager, image manager, sound manager, painter and so on.
   ## The implementation depends on the external libraries you choose.
+  ##
+  ## Implementation guideline
+  ## ========================
+  ##
+  ## In this framework, there is no implementation of ``Component``.
+  ## I expect that the implementation will be provided as a plugin library of WAQWA.
+  ##
+  ## ``Component`` is a collection of functionalities.
+  ## Examples:
+  ##
+  ## - Window manager
+  ##   - Show / hide window
+  ##   - Toggle fullscreen
+  ##   - Resize
+  ##   - Vsync
+  ## - Input manager
+  ##   - Get keyboard / mouse / gamepad statuses
+  ## - Image manager
+  ##   - Load files
+  ##   - Store images
+  ##   - Edit
+  ## - Sound manager
+  ##   - Load files
+  ##   - Play BGM / SFX
+  ##   - Fade-in / fade-out
+  ##   - 3D
+  ## - Painter: *Tag* ``WaqwaDrawEffect`` *for all procs about drawing.*
+  ##   - Draw fundamental figures
+  ##   - Draw images
+  ## - Font manager
+  ##   - Load files
+  ##   - Draw text
+  ## - Network manager
+  ##   - Connect TCP / UDP socket
+  ##
+  ## Order of calling methods
+  ## ========================
+  ##
+  ## *TODO: Add a figure here.*
+  ##
 
 elif docLocale == "ja":
   ## コンポーネント。
   ## ウィンドウ管理，画像管理，音声管理，描画などを含む。
   ## 実装は，選択する外部ライブラリに依存する。
+  ##
+  ## 実装指針
+  ## ========
+  ##
+  ## このフレームワークでは， ``Component`` に対する実装は提供されない。
+  ## 実装はWAQWAのプラグインライブラリとして提供されることを期待する。
+  ##
+  ## ``Component`` とは複数の機能の集合体である。
+  ## 以下に機能の例を挙げる：
+  ##
+  ## - ウィンドウ管理
+  ##   - ウィンドウ表示 / 非表示
+  ##   - フルスクリーン化 / 解除
+  ##   - 大きさ変更
+  ##   - 垂直同期
+  ## - 入力管理
+  ##   - キーボード / マウス / ゲームパッドの状態取得
+  ## - 画像管理
+  ##   - 画像ファイル読込
+  ##   - 画像保存
+  ##   - 画像編集
+  ## - 音声管理
+  ##   - 音声ファイル読込
+  ##   - BGM / 効果音の再生
+  ##   - フェードイン / フェードアウト
+  ##   - 3D音響
+  ## - 描画: ``WaqwaDrawEffect`` *タグを全ての描画に関連した手続きに付与すること。*
+  ##   - 基本図形の描画
+  ##   - 画像の描画
+  ## - 書体管理
+  ##   - フォントファイルの読込
+  ##   - 文字描画
+  ## - ネットワーク管理
+  ##   - TCP / UDPソケットの接続
+  ##
+  ## メソッドの呼出順序
+  ## ==================
+  ##
+  ## *TODO: Add a figure here.*
+  ##
+
 
 type
   Component* = ref object of RootObj ## \

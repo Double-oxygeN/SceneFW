@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import private/locale
+
+when docLocale == "en":
+  ## Game.
+
+elif docLocale == "ja":
+  ## ゲーム。
+
 import tables, times, std/monotimes
 when defined(js):
   import dom
@@ -31,42 +39,75 @@ type
 
 
 proc newGame*: Game =
-  ## Create new game object.
-  ## No scenes are set and frames-per-second (FPS) is set at 60.
+  when docLocale == "en":
+    ## Create new game object.
+    ## No scenes are set and frames-per-second (FPS) is set at 60.
+
+  elif docLocale == "ja":
+    ## ゲームオブジェクトを新規作成する。
+    ## シーンは1つも設定されておらず，FPSは60に設定されている。
+
   result = Game(sceneTable: newTable[string, Scene]())
   result.strictFps = true
   result.framesPerSecond = 60
 
 
 proc setFramesPerSecond*(self: Game; fps: Positive): Natural {.discardable.} =
-  ## Set frames-per-second at a specific value.
-  ## It returns previous FPS.
+  when docLocale == "en":
+    ## Set frames-per-second at a specific value.
+    ## It returns previous FPS.
+
+  elif docLocale == "ja":
+    ## FPSを特定の値に設定する。
+    ## 以前のFPSの値を返す。
+
   result = self.framesPerSecond
   self.framesPerSecond = fps
   self.strictFps = true
 
 
 proc unsetFramesPerSecond*(self: Game): Natural {.discardable.} =
-  ## Ignore frames-per-second (FPS).
-  ## It returns previous FPS.
+  when docLocale == "en":
+    ## Ignore frames-per-second (FPS).
+    ## It returns previous FPS.
+
+  elif docLocale == "ja":
+    ## FPSを無視する。
+    ## 以前のFPSの値を返す。
+
   result = self.framesPerSecond
   self.framesPerSecond = 0
   self.strictFps = false
 
 
 proc addScene*(self: Game; sceneId: string; scene: Scene; isFirstScene: bool = false) =
-  ## Register new scene with scene id.
+  when docLocale == "en":
+    ## Register new scene with scene id.
+
+  elif docLocale == "ja":
+    ## IDとともにシーンを新たに登録する。
+
   self.sceneTable[sceneId] = scene
   if isFirstScene: self.firstSceneId = sceneId
 
 
 proc countScenes*(self: Game): int =
-  ## Count registered scenes.
+  when docLocale == "en":
+    ## Count registered scenes.
+
+  elif docLocale == "ja":
+    ## 登録済みのシーンの数を数える。
+
   result = self.sceneTable.len
 
 
 proc start*(self: Game) =
-  ## Start the game.
+  when docLocale == "en":
+    ## Start the game.
+
+  elif docLocale == "ja":
+    ## ゲームを開始する。
+
   init self.component
   defer: finalize self.component
 

@@ -20,12 +20,12 @@ when docLocale == "en":
 elif docLocale == "ja":
   ## ゲーム。
 
-import tables, times, std/monotimes
+import tables
 when defined(js):
-  import dom
+  from dom import window, requestAnimationFrame
 else:
-  import os
-import transitions, scenes, components, scenemails
+  from os import sleep
+import fpscontroller, transitions, scenes, components, scenemails
 
 type
   Scene = BaseScene
@@ -110,13 +110,28 @@ proc start*(self: Game) =
   elif docLocale == "ja":
     ## ゲームを開始する。
 
+  var speedUpFlag = false
+  when defined(js):
+    var speedDownFlag = false
+  let fpsCon = newFpsController(self.framesPerSecond)
+
   type LoopCallee = (proc (recur: (proc () {.closure.})) {.closure.})
 
   proc loop(callee: LoopCallee) =
     when defined(js):
-      discard window.requestAnimationFrame do (elapsedTimeMillis: float):
+      if speedUpFlag:
         callee do ():
           loop(callee)
+
+      else:
+        discard window.requestAnimationFrame do (elapsedTimeMillis: float):
+          if speedDownFlag:
+            loop(callee)
+            speedDownFlag = fpsCon.getGap() > (fpsCon.msecPerFrame / 2).toBiggestInt()
+
+          else:
+            callee do ():
+              loop(callee)
 
     else:
       var quitFlag = false
@@ -133,30 +148,35 @@ proc start*(self: Game) =
   var currentScene: Scene = self.sceneTable[self.firstSceneId]
   currentScene.init(self.component)
 
-  var
-    speedUpFlag: bool = false
-    frameCount = 1'i64
-
-  let
-    msecPerFrame = 1e3 / self.framesPerSecond.toBiggestFloat()
-    startMonoTime = getMonoTime()
+  fpsCon.start()
 
   loop do (recur: auto):
     currentScene.resetTransition()
 
+    # Draw phase
     self.component.beforeDraw()
-
     if not speedUpFlag:
       currentScene.draw(self.component)
-
       self.component.afterDraw()
 
+    # Update phase
     self.component.beforeUpdate()
-
     currentScene.update(self.component)
-
     self.component.afterUpdate()
 
+    # End of frame
+    inc fpsCon
+    if self.strictFps:
+      let gapMsec = fpsCon.getGap()
+
+      speedUpFlag = gapMsec < 0
+      when defined(js):
+        speedDownFlag = gapMsec > (fpsCon.msecPerFrame / 2).toBiggestInt()
+
+      else:
+        if gapMsec > 1: sleep(gapMsec.int - 1)
+
+    # Transition phase
     case currentScene.transitionKind
     of tkStay:
       recur()
@@ -167,27 +187,9 @@ proc start*(self: Game) =
         mail = currentScene.mail
 
       nextScene.init(self.component, mail)
-
       currentScene = nextScene
 
       recur()
 
     of tkQuit:
       discard
-
-    when not defined(js):
-      if self.strictFps:
-        let
-          limitMsec = (msecPerFrame * frameCount.toBiggestFloat()).toBiggestInt()
-          monoTimeNow = getMonoTime()
-          elapsedMsec = (monoTimeNow - startMonoTime).inMilliseconds()
-
-        if elapsedMsec <= limitMsec:
-          speedUpFlag = false
-          if limitMsec - elapsedMsec > 1:
-            sleep((limitMsec - elapsedMsec).int - 1)
-
-        else:
-          speedUpFlag = true
-
-    inc frameCount

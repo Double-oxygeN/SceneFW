@@ -36,7 +36,7 @@ method visitUpdate(self: Component; scene: SampleScene3) {.base, tags: [IOEffect
 
 
 proc update(self: SampleScene3; component: SampleComp1) {.tags: [IOEffect].} =
-  if self.counter >= 40:
+  if self.counter >= 30:
     self.transitionTo("SampleScene2", newSampleMail1(self.counter))
 
   inc self.counter, 2
@@ -55,7 +55,8 @@ method visitDraw(self: Component; scene: SampleScene3) {.base, tags: [IOEffect, 
 
 
 proc draw(self: SampleScene3; component: SampleComp1) {.tags: [IOEffect, WaqwaDrawEffect].} =
-  component.print self.counter
+  component.logInteger -3
+  component.logInteger self.counter
 
 
 method visitDraw(self: SampleComp1; scene: SampleScene3) =

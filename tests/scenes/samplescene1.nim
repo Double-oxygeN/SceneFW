@@ -27,7 +27,7 @@ method visitUpdate(self: Component; scene: SampleScene1) {.base, tags: [IOEffect
 
 
 proc update(self: SampleScene1; component: SampleComp1) {.tags: [IOEffect].} =
-  if self.counter >= 20:
+  if self.counter >= 6:
     self.quit()
 
   inc self.counter
@@ -46,7 +46,7 @@ method visitDraw(self: Component; scene: SampleScene1) {.base, tags: [IOEffect, 
 
 
 proc draw(self: SampleScene1; component: SampleComp1) {.tags: [IOEffect, WaqwaDrawEffect].} =
-  component.print self.counter
+  component.logInteger self.counter
 
 
 method visitDraw(self: SampleComp1; scene: SampleScene1) =

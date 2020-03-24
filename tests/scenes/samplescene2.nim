@@ -12,7 +12,7 @@ method visitInit(self: Component; scene: SampleScene2) {.base, tags: [IOEffect].
 
 
 proc init(self: SampleScene2; component: SampleComp1) {.tags: [IOEffect].} =
-  self.counter = 0
+  self.counter = 10
 
 
 method visitInit(self: SampleComp1; scene: SampleScene2) =
@@ -52,7 +52,7 @@ method visitUpdate(self: Component; scene: SampleScene2) {.base, tags: [IOEffect
 
 
 proc update(self: SampleScene2; component: SampleComp1) {.tags: [IOEffect].} =
-  if self.counter >= 30:
+  if self.counter >= 25:
     self.quit()
 
   elif self.counter >= 20:
@@ -74,7 +74,8 @@ method visitDraw(self: Component; scene: SampleScene2) {.base, tags: [IOEffect, 
 
 
 proc draw(self: SampleScene2; component: SampleComp1) {.tags: [IOEffect, WaqwaDrawEffect].} =
-  component.print self.counter
+  component.logInteger -2
+  component.logInteger self.counter
 
 
 method visitDraw(self: SampleComp1; scene: SampleScene2) =

@@ -182,12 +182,14 @@ proc start*(self: Game) =
       recur()
 
     of tkNextScene:
-      let
-        nextScene = self.sceneTable[currentScene.mail.nextSceneId]
-        mail = currentScene.mail
+      while currentScene.transitionKind == tkNextScene:
+        let
+          mail = currentScene.mail
+          nextScene = self.sceneTable[mail.nextSceneId]
 
-      nextScene.init(self.component, mail)
-      currentScene = nextScene
+        nextScene.resetTransition()
+        nextScene.init(self.component, mail)
+        currentScene = nextScene
 
       recur()
 

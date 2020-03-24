@@ -5,7 +5,7 @@ import components/samplecomp1
 import scenes/[samplescene2, samplescene3]
 
 suite "Test Sample2":
-  test "Game ends properly":
+  test "Send mails properly":
     let
       component = newSampleComp1()
       game = newGame(component)

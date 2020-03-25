@@ -837,6 +837,8 @@ function main() {
     title="mail(mailTypeId: untyped{ident}; contents: untyped): untyped"><wbr />mail<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#localmail.m%2C%2Cuntyped"
     title="localmail(mailTypeId: untyped{ident}; contents: untyped): untyped"><wbr />localmail<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#scene.m%2C%2Ctypedesc%5BComponent%5D%2Cuntyped"
+    title="scene(sceneTypeId: untyped{ident}; compType: typedesc[Component]; contents: untyped): untyped"><wbr />scene<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
@@ -922,6 +924,65 @@ class="link-seesrc" target="_blank">Source</a>
 <a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
+<a id="scene.m,,typedesc[Component],untyped"></a>
+<dt><pre><span class="Keyword">macro</span> <a href="#scene.m%2C%2Ctypedesc%5BComponent%5D%2Cuntyped"><span class="Identifier">scene</span></a><span class="Other">(</span><span class="Identifier">sceneTypeId</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">{</span><span class="Identifier">ident</span><span class="Other">}</span><span class="Other">;</span> <span class="Identifier">compType</span><span class="Other">:</span> <span class="Identifier">typedesc</span><span class="Other">[</span><a href="scenefw/components.html#Component"><span class="Identifier">Component</span></a><span class="Other">]</span><span class="Other">;</span>
+           <span class="Identifier">contents</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">untyped</span></pre></dt>
+<dd>
+
+<p>Scene construction macro.</p>
+<p>This macro requires type identifier (<tt class="docutils literal"><span class="pre">sceneTypeId</span></tt>), component type (<tt class="docutils literal"><span class="pre">compType</span></tt>) and scene definition section (<tt class="docutils literal"><span class="pre">contents</span></tt>). It automatically generates a new type whose name is same as <tt class="docutils literal"><span class="pre">sceneTypeId</span></tt> and a constructor proc (type name with prefix <tt class="docutils literal"><span class="pre">new</span></tt>), and implements some essential methods. The type inherits from <tt class="docutils literal"><span class="pre">BaseScene</span></tt>. The generated type and the constructor are exported, so you should call this at top-level and use them in other modules. </p>
+
+<p><strong class="examples_text">Examples:</strong></p>
+<pre class="listing"><span class="Keyword">type</span>
+  <span class="Identifier">Painter</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
+  <span class="Identifier">ExampleComp</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">Component</span>
+    <span class="Identifier">painter</span><span class="Other">:</span> <span class="Identifier">Painter</span>
+
+<span class="Keyword">proc</span> <span class="Identifier">draw</span><span class="Other">(</span><span class="Identifier">self</span><span class="Other">:</span> <span class="Identifier">Painter</span><span class="Other">;</span> <span class="Identifier">text</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">WaqwaDrawEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span> <span class="Other">=</span>
+  <span class="Keyword">discard</span>
+
+<span class="Identifier">mail</span><span class="Other">(</span><span class="Identifier">ExampleMail</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Keyword">var</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span>
+<span class="Identifier">scene</span><span class="Other">(</span><span class="Identifier">ExampleScene</span><span class="Other">,</span> <span class="Identifier">ExampleComp</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Comment">## Variables declared with var keyword become scene properties.</span>
+  <span class="Comment">## You cannot initialize them by the constructor, so you should do that in init section.</span>
+  <span class="Keyword">var</span>
+    <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span>
+    <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">string</span>
+  <span class="Comment">## Variables declared with let keyword become scene properties.</span>
+  <span class="Comment">## You can initialize them as the arguments of the constructor.</span>
+  <span class="Comment">## In this example, the generated constructor is</span>
+  <span class="Comment">## `proc newExampleScene(d: range[0..100]; e: float)`.</span>
+  <span class="Keyword">let</span>
+    <span class="Identifier">d</span><span class="Other">:</span> <span class="Identifier">range</span><span class="Other">[</span><span class="DecNumber">0</span> <span class="Operator">..</span> <span class="DecNumber">100</span><span class="Other">]</span>
+    <span class="Identifier">e</span><span class="Other">:</span> <span class="Identifier">float</span>
+  <span class="Comment">## Statements in start section means initialization as a start scene.</span>
+  <span class="Identifier">start</span><span class="Other">:</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">a</span> <span class="Other">=</span> <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">d</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">b</span> <span class="Other">=</span> <span class="DecNumber">100</span> <span class="Operator">-</span> <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">d</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">c</span> <span class="Other">=</span> <span class="StringLit">&quot;po&quot;</span>
+  <span class="Comment">## Statements in init section means initialization after a transition.</span>
+  <span class="Comment">## You can receive a scene mail as `mail` when you write the type name of the scene mail</span>
+  <span class="Comment">## sent from the previous scene in the bracket.</span>
+  <span class="Identifier">init</span><span class="Other">[</span><span class="Identifier">ExampleMail</span><span class="Other">]</span><span class="Other">:</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">a</span> <span class="Other">=</span> <span class="Identifier">mail</span><span class="Other">.</span><span class="Identifier">a</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">b</span> <span class="Other">=</span> <span class="Identifier">mail</span><span class="Other">.</span><span class="Identifier">b</span>
+    <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">c</span> <span class="Other">=</span> <span class="StringLit">&quot;po&quot;</span>
+  <span class="Comment">## Statements in update section means how to update the scene in a frame.</span>
+  <span class="Identifier">update</span><span class="Other">:</span>
+    <span class="Keyword">if</span> <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">a</span> <span class="Operator">&gt;=</span> <span class="DecNumber">90</span><span class="Other">:</span>
+      <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">quit</span><span class="Other">(</span><span class="Other">)</span>
+    <span class="Identifier">inc</span> <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">a</span>
+    <span class="Identifier">dec</span> <span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">b</span>
+  <span class="Comment">## Statements in draw section means how to draw the scene in a frame.</span>
+  <span class="Identifier">draw</span><span class="Other">:</span>
+    <span class="Identifier">component</span><span class="Other">.</span><span class="Identifier">painter</span><span class="Other">.</span><span class="Identifier">draw</span><span class="Other">(</span><span class="Identifier">self</span><span class="Other">.</span><span class="Identifier">c</span><span class="Other">)</span></pre>
+&nbsp;&nbsp;<a
+href="https://github.com/Double-oxygeN/SceneFW/tree/master/src/scenefw.nim#L199"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/Double-oxygeN/SceneFW/edit/devel/src/scenefw.nim#L199" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
 
 </dl></div>
 <div class="section" id="19">
@@ -937,7 +998,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-03-23 04:53:45 UTC</small>
+        <small>Made with Nim. Generated: 2020-03-25 04:45:12 UTC</small>
       </div>
     </div>
   </div>

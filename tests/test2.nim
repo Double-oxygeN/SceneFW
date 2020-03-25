@@ -10,8 +10,8 @@ suite "Test Sample2":
       component = newSampleComp1()
       game = newGame(component)
 
-    game.addScene("SampleScene2", new SampleScene2, isFirstScene = true)
-    game.addScene("SampleScene3", new SampleScene3)
+    game.addScene("SampleScene2", newSampleScene2(), isFirstScene = true)
+    game.addScene("SampleScene3", newSampleScene3())
 
     game.unsetFramesPerSecond()
     game.start()

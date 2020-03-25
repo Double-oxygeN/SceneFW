@@ -10,7 +10,7 @@ suite "Test Sample1":
       component = newSampleComp1()
       game = newGame(component)
 
-    game.addScene("SampleScene1", new SampleScene1, isFirstScene = true)
+    game.addScene("SampleScene1", newSampleScene1(), isFirstScene = true)
 
     game.unsetFramesPerSecond()
     game.start()

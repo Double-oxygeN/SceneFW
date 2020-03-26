@@ -23,6 +23,7 @@ elif docLocale == "ja":
 import tables
 when defined(js):
   from dom import window, requestAnimationFrame
+  import private/zerotimeout
 else:
   from os import sleep
 import fpscontroller, transitions, scenes, components, scenemails
@@ -120,8 +121,9 @@ proc start*(self: Game) =
   proc loop(callee: LoopCallee) =
     when defined(js):
       if speedUpFlag:
-        callee do ():
-          loop(callee)
+        setZeroTimeout do ():
+          callee do ():
+            loop(callee)
 
       else:
         discard window.requestAnimationFrame do (elapsedTimeMillis: float):

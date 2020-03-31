@@ -47,27 +47,59 @@ proc isTransitionLocked*(self: BaseScene): bool =
 
 
 proc enableTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Turn off the transition lock and enable transitions.
+
+  elif docLocale == "ja":
+    ## 遷移ロックを解除して遷移を有効化する。
+
   withLock(self.transitionLockLock):
     self.transitionLock = off
 
 
 proc disableTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Turn on the transition lock and disable transitions.
+
+  elif docLocale == "ja":
+    ## 遷移ロックをかけて遷移を無効化する。
+
   withLock(self.transitionLockLock):
     self.transitionLock = on
 
 
 proc resetTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Reset transition information and stay the current scene.
+
+  elif docLocale == "ja":
+    ## 遷移情報を初期化して現在のシーンに留まる。
+
   self.transitionKind = tkStay
   self.mail = nil
 
 
 proc transitionTo*(self: BaseScene; nextSceneId: string; mail: SceneMail) =
+  when docLocale == "en":
+    ## Transition to the next scene with sending a scene mail.
+    ## When the transition lock is on, calling this proc is ignored.
+
+  elif docLocale == "ja":
+    ## シーンメールを送信して次のシーンに遷移する。
+    ## 遷移ロックが有効な間は，この手続きの呼出は無視される。
+
   self.transitionKind = tkNextScene
   self.mail = mail
   self.mail.nextSceneId = nextSceneId
 
 
 proc quit*(self: BaseScene) =
+  when docLocale == "en":
+    ## Quit the game.
+
+  elif docLocale == "ja":
+    ## ゲームを終了する。
+
   self.transitionKind = tkQuit
   self.mail = nil
 

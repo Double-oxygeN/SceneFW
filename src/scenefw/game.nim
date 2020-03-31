@@ -26,6 +26,7 @@ when defined(js):
   import private/zerotimeout
 else:
   from os import sleep
+  import asyncdispatch
 import fpscontroller, transitions, scenes, components, scenemails
 
 type
@@ -140,6 +141,9 @@ proc start*(self: Game) =
 
       while not quitFlag:
         quitFlag = true
+
+        try: poll(0) except ValueError: discard
+
         callee do ():
           quitFlag = false
 

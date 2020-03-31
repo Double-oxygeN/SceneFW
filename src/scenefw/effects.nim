@@ -15,7 +15,8 @@
 ## Effects for WAQWA project.
 
 type
-  WaqwaDrawEffect* = object of RootEffect ## \
+  WaqwaRootEffect {.compilerproc.} = object of RootObj
+  WaqwaDrawEffect* = object of WaqwaRootEffect ## \
     ## This effect describes that the proc should be used only in `draw` method.
 
 type

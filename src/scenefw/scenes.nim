@@ -72,7 +72,7 @@ proc quit*(self: BaseScene) =
   self.mail = nil
 
 
-method init*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
+method init*(self: BaseScene; component: Component) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Initialize the scene.
     ## This method is called when the game begins.
@@ -84,7 +84,7 @@ method init*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
   discard
 
 
-method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base, tags: [IOEffect].} =
+method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Initialize the scene with the mail sent by the previous scene.
     ## This method is called whenever the scene begins.
@@ -96,7 +96,7 @@ method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base,
   discard
 
 
-method update*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
+method update*(self: BaseScene; component: Component) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Update the scene.
     ## This method is called in every frame.
@@ -108,7 +108,7 @@ method update*(self: BaseScene; component: Component) {.base, tags: [IOEffect].}
   discard
 
 
-method draw*(self: BaseScene; component: Component) {.base, tags: [IOEffect, WaqwaDrawEffect].} =
+method draw*(self: BaseScene; component: Component) {.base, tags: [RootEffect, WaqwaDrawEffect].} =
   when docLocale == "en":
     ## Output the scene to the display.
     ## This method is called at most once in a frame.

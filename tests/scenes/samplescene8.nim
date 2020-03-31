@@ -2,7 +2,7 @@ import scenefw
 import ../components/samplecomp1
 import ../mails/samplemail1
 
-scene(SampleScene8, SampleComp1):
+scene SampleScene8, SampleComp1:
   var counter: Natural
 
   init[SampleMail1]:

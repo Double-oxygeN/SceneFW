@@ -3,7 +3,7 @@ import scenefw
 import ../components/samplecomp1
 import ../mails/samplemail1
 
-scene(SampleScene7, SampleComp1):
+scene SampleScene7, SampleComp1:
   var counter: Natural
 
   start:

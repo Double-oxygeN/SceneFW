@@ -26,6 +26,7 @@ when defined(js):
   import private/zerotimeout
 else:
   from os import sleep
+  import asyncdispatch
 import fpscontroller, transitions, scenes, components, scenemails
 
 type
@@ -140,6 +141,9 @@ proc start*(self: Game) =
 
       while not quitFlag:
         quitFlag = true
+
+        try: poll(0) except ValueError: discard
+
         callee do ():
           quitFlag = false
 
@@ -148,7 +152,20 @@ proc start*(self: Game) =
   defer: finalize self.component
 
   var currentScene: Scene = self.sceneTable[self.firstSceneId]
+  currentScene.resetTransition()
+  currentScene.enableTransition()
   currentScene.init(self.component)
+
+  if not currentScene.isTransitionLocked:
+    while currentScene.transitionKind == tkNextScene:
+      let
+        mail = currentScene.mail
+        nextScene = self.sceneTable[mail.nextSceneId]
+
+      nextScene.resetTransition()
+      nextScene.enableTransition()
+      nextScene.init(self.component, mail)
+      currentScene = nextScene
 
   fpsCon.start()
 
@@ -184,14 +201,16 @@ proc start*(self: Game) =
       recur()
 
     of tkNextScene:
-      while currentScene.transitionKind == tkNextScene:
-        let
-          mail = currentScene.mail
-          nextScene = self.sceneTable[mail.nextSceneId]
+      if not currentScene.isTransitionLocked:
+        while currentScene.transitionKind == tkNextScene:
+          let
+            mail = currentScene.mail
+            nextScene = self.sceneTable[mail.nextSceneId]
 
-        nextScene.resetTransition()
-        nextScene.init(self.component, mail)
-        currentScene = nextScene
+          nextScene.resetTransition()
+          nextScene.enableTransition()
+          nextScene.init(self.component, mail)
+          currentScene = nextScene
 
       recur()
 

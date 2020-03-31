@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+when defined(js):
+  type Lock = object
+  template withLock(a: Lock; body: untyped): untyped = body
+else:
+  import locks
+
 import private/locale
 
 when docLocale == "en":
@@ -27,29 +33,78 @@ type
     ## Every scene is created with extending this.
     transitionKind: TransitionKind
     mail: SceneMail
+    transitionLock: bool
+    transitionLockLock: Lock
 
 
 proc transitionKind*(self: BaseScene): TransitionKind = self.transitionKind
 proc mail*(self: BaseScene): SceneMail = self.mail
 
 
+proc isTransitionLocked*(self: BaseScene): bool =
+  withLock(self.transitionLockLock):
+    result = self.transitionLock
+
+
+proc enableTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Turn off the transition lock and enable transitions.
+
+  elif docLocale == "ja":
+    ## 遷移ロックを解除して遷移を有効化する。
+
+  withLock(self.transitionLockLock):
+    self.transitionLock = off
+
+
+proc disableTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Turn on the transition lock and disable transitions.
+
+  elif docLocale == "ja":
+    ## 遷移ロックをかけて遷移を無効化する。
+
+  withLock(self.transitionLockLock):
+    self.transitionLock = on
+
+
 proc resetTransition*(self: BaseScene) =
+  when docLocale == "en":
+    ## Reset transition information and stay the current scene.
+
+  elif docLocale == "ja":
+    ## 遷移情報を初期化して現在のシーンに留まる。
+
   self.transitionKind = tkStay
   self.mail = nil
 
 
 proc transitionTo*(self: BaseScene; nextSceneId: string; mail: SceneMail) =
+  when docLocale == "en":
+    ## Transition to the next scene with sending a scene mail.
+    ## When the transition lock is on, calling this proc is ignored.
+
+  elif docLocale == "ja":
+    ## シーンメールを送信して次のシーンに遷移する。
+    ## 遷移ロックが有効な間は，この手続きの呼出は無視される。
+
   self.transitionKind = tkNextScene
   self.mail = mail
   self.mail.nextSceneId = nextSceneId
 
 
 proc quit*(self: BaseScene) =
+  when docLocale == "en":
+    ## Quit the game.
+
+  elif docLocale == "ja":
+    ## ゲームを終了する。
+
   self.transitionKind = tkQuit
   self.mail = nil
 
 
-method init*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
+method init*(self: BaseScene; component: Component) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Initialize the scene.
     ## This method is called when the game begins.
@@ -61,7 +116,7 @@ method init*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
   discard
 
 
-method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base, tags: [IOEffect].} =
+method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Initialize the scene with the mail sent by the previous scene.
     ## This method is called whenever the scene begins.
@@ -73,7 +128,7 @@ method init*(self: BaseScene; component: Component; recvMail: SceneMail) {.base,
   discard
 
 
-method update*(self: BaseScene; component: Component) {.base, tags: [IOEffect].} =
+method update*(self: BaseScene; component: Component) {.base, tags: [RootEffect].} =
   when docLocale == "en":
     ## Update the scene.
     ## This method is called in every frame.
@@ -85,7 +140,7 @@ method update*(self: BaseScene; component: Component) {.base, tags: [IOEffect].}
   discard
 
 
-method draw*(self: BaseScene; component: Component) {.base, tags: [IOEffect, WaqwaDrawEffect].} =
+method draw*(self: BaseScene; component: Component) {.base, tags: [RootEffect, WaqwaDrawEffect].} =
   when docLocale == "en":
     ## Output the scene to the display.
     ## This method is called at most once in a frame.

@@ -29,7 +29,7 @@ import scenefw/private/locale
 export WaqwaDrawEffect, WaqwaError
 export Component
 export SceneMail
-export BaseScene, transitionTo, scenes.quit
+export BaseScene, transitionTo, scenes.quit, disableTransition, enableTransition
 export Game, newGame, setFramesPerSecond, unsetFramesPerSecond, addScene, countScenes, start
 
 template mail0(mailTypeId: untyped{ident}; exportMarker: bool; contents: untyped): untyped =
@@ -429,10 +429,10 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
     componentIdent = ident"component"
 
   let startMethodDecls = quote do:
-    proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [IOEffect].} =
+    proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [RootEffect].} =
       `startMethodStmt`
 
-    method visitInit(self: Component; scene: `sceneTypeId`) {.base, tags: [IOEffect].} =
+    method visitInit(self: Component; scene: `sceneTypeId`) {.base, tags: [RootEffect].} =
       raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
 
     method visitInit(self: `compType`; scene: `sceneTypeId`) =
@@ -452,10 +452,10 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
     let
       mailIdent = ident"mail"
       initMethodDecls = quote do:
-        method visitInit(self: Component; scene: `sceneTypeId`; mail: SceneMail) {.base, tags: [IOEffect].} =
+        method visitInit(self: Component; scene: `sceneTypeId`; mail: SceneMail) {.base, tags: [RootEffect].} =
           raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
 
-        method visitInit(self: SceneMail; scene: `sceneTypeId`; component: `compType`) {.base, tags: [IOEffect].} =
+        method visitInit(self: SceneMail; scene: `sceneTypeId`; component: `compType`) {.base, tags: [RootEffect].} =
           raise WaqwaError.newException("Received undefined mail for " & `sceneTypeStr` & ".")
 
         method visitInit(self: `compType`; scene: `sceneTypeId`; mail: SceneMail) =
@@ -466,7 +466,7 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
 
     for (mailTypeId, initStmt) in initMethodStmtTable:
       let initProcDecl = quote do:
-        proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: `mailTypeId`) {.tags: [IOEffect].} =
+        proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: `mailTypeId`) {.tags: [RootEffect].} =
           `initStmt`
 
         method visitInit(self: `mailTypeId`; scene: `sceneTypeId`; component: `compType`) =
@@ -477,10 +477,10 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
     startMethodDecls.add initMethodDecls
 
   let updateMethodDecls = quote do:
-    proc update(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [IOEffect].} =
+    proc update(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [RootEffect].} =
       `updateMethodStmt`
 
-    method visitUpdate(self: Component; scene: `sceneTypeId`) {.base, tags: [IOEffect].} =
+    method visitUpdate(self: Component; scene: `sceneTypeId`) {.base, tags: [RootEffect].} =
       raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
 
     method visitUpdate(self: `compType`; scene: `sceneTypeId`) =
@@ -490,10 +490,10 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
       component.visitUpdate(`selfIdent`)
 
   let drawMethodDecls = quote do:
-    proc draw(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [IOEffect, WaqwaDrawEffect].} =
+    proc draw(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`) {.tags: [RootEffect, WaqwaDrawEffect].} =
       `drawMethodStmt`
 
-    method visitDraw(self: Component; scene: `sceneTypeId`) {.base, tags: [IOEffect, WaqwaDrawEffect].} =
+    method visitDraw(self: Component; scene: `sceneTypeId`) {.base, tags: [RootEffect, WaqwaDrawEffect].} =
       raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
 
     method visitDraw(self: `compType`; scene: `sceneTypeId`) =

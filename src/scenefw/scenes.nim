@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+when defined(js):
+  type Lock = object
+  template withLock(a: Lock; body: untyped): untyped = body
+else:
+  import locks
+
 import private/locale
 
 when docLocale == "en":
@@ -27,10 +33,27 @@ type
     ## Every scene is created with extending this.
     transitionKind: TransitionKind
     mail: SceneMail
+    transitionLock: bool
+    transitionLockLock: Lock
 
 
 proc transitionKind*(self: BaseScene): TransitionKind = self.transitionKind
 proc mail*(self: BaseScene): SceneMail = self.mail
+
+
+proc isTransitionLocked*(self: BaseScene): bool =
+  withLock(self.transitionLockLock):
+    result = self.transitionLock
+
+
+proc enableTransition*(self: BaseScene) =
+  withLock(self.transitionLockLock):
+    self.transitionLock = off
+
+
+proc disableTransition*(self: BaseScene) =
+  withLock(self.transitionLockLock):
+    self.transitionLock = on
 
 
 proc resetTransition*(self: BaseScene) =

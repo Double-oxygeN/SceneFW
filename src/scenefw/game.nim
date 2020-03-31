@@ -156,6 +156,17 @@ proc start*(self: Game) =
   currentScene.enableTransition()
   currentScene.init(self.component)
 
+  if not currentScene.isTransitionLocked:
+    while currentScene.transitionKind == tkNextScene:
+      let
+        mail = currentScene.mail
+        nextScene = self.sceneTable[mail.nextSceneId]
+
+      nextScene.resetTransition()
+      nextScene.enableTransition()
+      nextScene.init(self.component, mail)
+      currentScene = nextScene
+
   fpsCon.start()
 
   loop do (recur: auto):

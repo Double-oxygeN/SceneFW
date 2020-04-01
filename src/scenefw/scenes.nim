@@ -79,7 +79,7 @@ proc resetTransition*(self: BaseScene) =
   self.mail = nil
 
 
-proc transitionTo*(self: BaseScene; nextSceneId: string; mail: SceneMail) =
+proc transitionTo*(self: BaseScene; nextSceneId: string; mail: SceneMail = new SceneMail) =
   when docLocale == "en":
     ## Transition to the next scene with sending a scene mail.
     ## When the transition lock is on, calling this proc is ignored.

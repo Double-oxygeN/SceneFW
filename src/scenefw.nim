@@ -328,6 +328,7 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
     initMethodStmtTable = newSeq[tuple[mailTypeId, initStmt: NimNode]]()
     updateMethodStmt = newStmtList(nnkDiscardStmt.newTree(newEmptyNode()))
     drawMethodStmt = newStmtList(nnkDiscardStmt.newTree(newEmptyNode()))
+    hasPlainInitMethod = false
 
   let
     sceneTypeStr = $sceneTypeId
@@ -374,6 +375,7 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
 
         of "init":
           initMethodStmtTable.add (bindSym"SceneMail", content[1])
+          hasPlainInitMethod = true
 
         of "update":
           updateMethodStmt = content[1]
@@ -451,26 +453,48 @@ macro scene*(sceneTypeId: untyped{ident}; compType: typedesc[Component]; content
   else:
     let
       mailIdent = ident"mail"
-      initMethodDecls = quote do:
-        method visitInit(self: Component; scene: `sceneTypeId`; mail: SceneMail) {.base, tags: [RootEffect].} =
-          raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
+      initMethodDecls = if hasPlainInitMethod:
+          quote do:
+            proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: SceneMail) {.tags: [RootEffect].}
 
-        method visitInit(self: SceneMail; scene: `sceneTypeId`; component: `compType`) {.base, tags: [RootEffect].} =
-          raise WaqwaError.newException("Received undefined mail for " & `sceneTypeStr` & ".")
+            method visitInit(self: SceneMail; scene: `sceneTypeId`; component: `compType`) {.base, tags: [RootEffect].} =
+              scene.init(component, self)
 
-        method visitInit(self: `compType`; scene: `sceneTypeId`; mail: SceneMail) =
-          mail.visitInit(scene, self)
+            method visitInit(self: Component; scene: `sceneTypeId`; mail: SceneMail) {.base, tags: [RootEffect].} =
+              raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
 
-        method init(`selfIdent`: `sceneTypeId`; component: Component; mail: SceneMail) =
-          component.visitInit(`selfIdent`, mail)
+            method visitInit(self: `compType`; scene: `sceneTypeId`; mail: SceneMail) =
+              mail.visitInit(scene, self)
+
+            method init(`selfIdent`: `sceneTypeId`; component: Component; mail: SceneMail) =
+              component.visitInit(`selfIdent`, mail)
+        else:
+          quote do:
+            method visitInit(self: SceneMail; scene: `sceneTypeId`; component: `compType`) {.base, tags: [RootEffect].} =
+              raise WaqwaError.newException("Received undefined mail for " & `sceneTypeStr` & ".")
+
+            method visitInit(self: Component; scene: `sceneTypeId`; mail: SceneMail) {.base, tags: [RootEffect].} =
+              raise WaqwaError.newException("Undefined component for " & `sceneTypeStr` & ".")
+
+            method visitInit(self: `compType`; scene: `sceneTypeId`; mail: SceneMail) =
+              mail.visitInit(scene, self)
+
+            method init(`selfIdent`: `sceneTypeId`; component: Component; mail: SceneMail) =
+              component.visitInit(`selfIdent`, mail)
 
     for (mailTypeId, initStmt) in initMethodStmtTable:
-      let initProcDecl = quote do:
-        proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: `mailTypeId`) {.tags: [RootEffect].} =
-          `initStmt`
+      let initProcDecl = if $mailTypeId == "SceneMail":
+          quote do:
+            proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: `mailTypeId`) {.tags: [RootEffect].} =
+              `initStmt`
 
-        method visitInit(self: `mailTypeId`; scene: `sceneTypeId`; component: `compType`) =
-          scene.init(component, self)
+        else:
+          quote do:
+            proc init(`selfIdent`: `sceneTypeId`; `componentIdent`: `compType`; `mailIdent`: `mailTypeId`) {.tags: [RootEffect].} =
+              `initStmt`
+
+            method visitInit(self: `mailTypeId`; scene: `sceneTypeId`; component: `compType`) =
+              scene.init(component, self)
 
       initMethodDecls.add initProcDecl
 

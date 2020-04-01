@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.0"
+version       = "0.2.1"
 author        = "Double_oxygeN"
 description   = "Scene-oriented programming framework for game development"
 license       = "Apache-2.0"
